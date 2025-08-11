@@ -1,0 +1,94 @@
+/* style.css */
+
+body {
+    font-family: 'Courier New', Courier, monospace, sans-serif;
+    margin: 0;
+    padding: 1rem;
+    background: #f6f8fa;
+    color: #333;
+}
+
+main {
+    max-width:830px;
+    margin: auto;
+    padding: 1rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+
+}
+
+h1,h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+form {
+    display: grid;    
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+form label {
+    font-weight: bold;
+}   
+
+form input[type="number"]
+ {
+  padding: 0.5rem;
+  border: 1px solid #ccc;  
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
+form button {
+  padding: 0.75rem;
+  background: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+form button:hover {
+  background: #005f99;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+
+
+td, th {
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+
+th {
+    background: #007acc;
+    font-weight: bold;
+    color: white;
+}
+
+.delete-btn, .edit-btn {
+    padding: 0.2rem 0.2rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+tbody tr:nth-child(even) {
+    background: #f2f2f2;
+}   
+

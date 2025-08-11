@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monthly Energy Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js"></script>
+  
+</head>
+<body>
+  <main>
+    <h1>Monthly Energy Tracker v1</h1>
+
+    <form id="energy-form">
+
+      <label for="energy">This Month Energy Used (kWh):</label>
+      <input type="number" id="energy" name="energy" required min="0" />
+
+      <label for="last_energy">Last Month Energy Used (kWh):</label>
+      <input type="number" id="last_energy" name="last_energy" required min="0" />
+
+     <input type="hidden" id="month" name="month"/>
+     <input type="hidden" id="date" name="date"/>
+     <input type="hidden" id="time" name="time"/>     
+
+      <button type="submit" id="submit" value="Add Entry">Add Entry</button>
+    </form>
+
+    <section id="entries">
+      <h2>Saved Entries</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Present Energy (kWh) Measure</th>
+            <th>Last Month Energy (kWh) Measure</th>
+            <th>Delta</th>
+            <th>Rate</th>
+            <th>Cost</th>
+            <th colspan="2">Actions</th>
+            
+          </tr>
+        </thead>
+        <tbody id="entry-list">
+          <!-- Entries will appear here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+<script src="app.js"></script>
+  
+</body>
+</html>
