@@ -54,8 +54,9 @@ monthly-energy-tracker/
 
 ## Next Steps (Planned Iteration 3)
 
-- CSV export for spreadsheet compatibility.
-- Charts to visualize energy consumption trends.
-- Improved sorting and filtering of entries.
-- Prepare the app for PWA (offline, installable).
+- Pagination features
+- Server side persistence
+- Authentication and Autorization
+- energy usage charts
+- Multiuser feature
 
