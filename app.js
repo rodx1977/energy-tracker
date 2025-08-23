@@ -2,6 +2,15 @@ const { dbName: DB_NAME, dbVersion: DB_VERSION, storeName: STORE_NAME, energy_co
 
 let db;
 
+function setFooterText(){
+  let todayDate = new Date();
+  document.getElementById("footer-text").textContent = ` ${todayDate.getFullYear()} Energy Tracker App. By Rodx`;
+
+}
+
+
+
+
 //abrir indexedDB
 function openDB() {
   const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -18,6 +27,7 @@ function openDB() {
     // console.log("object store name "+STORE_NAME);
     // console.log("energy cost per kwh "+ENERGY_COST_PER_KWH);
     displayEntries();
+    setFooterText(); // Set footer text with current year
   }
 
   request.onupgradeneeded = (event) => { 
@@ -201,6 +211,92 @@ document.getElementById("energy-form").addEventListener("submit", (e) => {
 });
 
 
+//handle export button
+document.getElementById("export-button").addEventListener("click", () => {
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  const request = store.getAll();
+
+  request.onsuccess = () => {
+    const entries = request.result;
+    const dataStr = "data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(entries));
+    const dlAnchor = document.createElement("a");
+    dlAnchor.setAttribute("href", dataStr);
+    let dateTime = new Date().toISOString().replace(/[:.]/g, "-"); // Replace colons and dots for filename compatibility
+    console.log("dato fecha y hora", dateTime);
+    dlAnchor.setAttribute("download", "energy_entries_"+dateTime+".json");
+    dlAnchor.click();
+    console.log("Data exported successfully");
+  };
+});
+
+//handle import button
+document.getElementById("import-file").addEventListener("change",(event) => {
+  const msgImportAlert = "Are you sure you want to import entries? This will overwrite existing data."
+
+  if(!confirm(msgImportAlert)){
+    document.getElementById("import-file").value = ""; // Clear the file input if import is cancelled
+    return; 
+  }
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const entries = JSON.parse(e.target.result);
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      const store = tx.objectStore(STORE_NAME);
+
+      entries.forEach(entry => {
+        //ensure no duplicate id causes issues
+        delete entry.id; // Remove id to let IndexedDB auto-increment
+        store.add(entry);
+      });
+
+      tx.oncomplete = () => {
+        alert("Entries imported successfully");
+        displayEntries();
+        const fileInput = document.getElementById("import-file");
+        fileInput.value = ""; // Clear the file input after import
+        document.getElementById("energy-form").style.display = "grid";
+        showSection("entries"); // Show entries section after import
+      };
+
+      } catch (error) {
+        alert("Error importing entries: " + error.message);
+      }
+
+    };
+    reader.readAsText(file); 
+
+});
+
+function showSection(sectionId){
+  document.querySelectorAll("main section").forEach(sec => sec.style.display = "none");
+  document.getElementById(sectionId).style.display = "block";
+}
+
+document.getElementById("menu-home").addEventListener("click", () => {
+  showSection("entries");
+  document.getElementById("energy-form").style.display = "grid";
+});
+
+document.getElementById("export-data").addEventListener("click", () => {
+  showSection("export-section");
+  document.getElementById("energy-form").style.display = "none";
+});
+
+document.getElementById("import-data").addEventListener("click", () => {
+  showSection("import-section");
+  document.getElementById("energy-form").style.display = "none";
+});
+
+showSection("entries"); // Show entries section by default
+
+
 //Initialize everything
 openDB();
+
+
 

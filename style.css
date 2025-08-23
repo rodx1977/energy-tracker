@@ -79,7 +79,7 @@ th {
     color: white;
 }
 
-.delete-btn, .edit-btn {
+.delete-btn, .edit-btn  {
     padding: 0.2rem 0.2rem;
     background: #e74c3c;
     color: white;
@@ -88,7 +88,117 @@ th {
     cursor: pointer;
 }
 
+.export-button {
+    padding: 0.2rem 0.2rem;
+    background: #014b17;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.export-button:hover {
+    background: #09e04a;
+}
+
+.custom-file-input{
+    display: none;
+}
+
+.custom-file-input-label {
+    display: inline-block;
+    padding: 0.2rem 0.2rem;
+    background: #014b17;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.custom-file-input-label:hover {
+    background: #09e04a;
+}
+
+/* input[type="file"] {
+    display: flex;
+    padding: 0.2rem 0.2rem;
+    background: #014b17;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    
+} */
+
+
 tbody tr:nth-child(even) {
     background: #f2f2f2;
 }   
+
+nav {
+    background: #014775;
+    padding: 0.5rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav ul li {
+    position: relative;
+}   
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem;
+    display: block;
+}   
+
+nav a:hover {
+    background: #489dd6;
+    border-radius: 4px ;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #007acc;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  min-width: 120px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);  
+}
+
+.dropdown-content li a  {
+    padding: 0.5rem;
+    font-weight: normal;   
+    color: white;
+}
+
+.dropdown-content li a:hover {
+    background: #005f99;
+}       
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.footer-text-paragraph {
+    text-align: center;
+    margin-top: 2rem;
+    color: #666;
+    font-size: 0.9rem;
+}
 

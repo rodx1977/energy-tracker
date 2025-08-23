@@ -9,6 +9,19 @@
   
 </head>
 <body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#" id="menu-home">Home</a></li>
+        <li class="dropdown"><a href="#" id="menu-datamanage">Manage Entries</a>
+        <ul class="dropdown-content">
+          <li><a href="#" id="export-data">Export</a></li>
+          <li><a href="#" id="import-data">Import</a></li>          
+        </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
   <main>
     <h1>Monthly Energy Tracker v1</h1>
 
@@ -49,7 +62,23 @@
         </tbody>
       </table>
     </section>
+    <section id="export-section" style="display: none;">
+      <h2>Export</h2>
+      <p>Click the button below to export your data.</p>
+      <button id="export-button" class="export-button">Export</button>
+      <div id="export-result"></div>
+    </section>
+    <section id="import-section" style="display: none;">
+      <h2>Import</h2>           
+      <div id="import-result"></div>
+      <label for="import-file" class="custom-file-input-label">Choose JSON file to import:</label>
+      <input type="file" id="import-file" accept="application/json" class="custom-file-input" />
+      
+    </section>
   </main>
+  <footer>
+    <p class="footer-text-paragraph" id="footer-text-paragraph">&copy;<span id="footer-text" class="footer-text"></span></p>
+  </footer>
 <script src="app.js"></script>
   
 </body>
