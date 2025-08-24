@@ -2,6 +2,45 @@
 The Monthly Energy Tracker v1 is a single-page web application (SPA) built with HTML5, CSS3, and JavaScript using IndexedDB for local persistence.
 
 23/8/25
+## Iteration 2.1 – Pagination Feature
+
+This update introduces pagination for the entries table so that
+large datasets are easier to browse. Instead of showing all saved
+entries at once, the app now splits them into smaller pages.
+
+### Key Details
+- Pagination controls are displayed below the entries table.
+- Users can navigate between pages (3,6,12,24).
+- The number of entries per page is fixed via a select html control (configurable in code).
+- Ensures that even with hundreds of records, performance and
+  readability remain consistent.
+
+### How Pagination Works
+1. When entries are retrieved from IndexedDB, they are split into
+   pages according to the defined "page size".
+2. Only the current page of entries is rendered in the table.
+3. Pagination buttons update the displayed subset of entries.
+
+### Benefits
+- Better performance with larger datasets.
+- Cleaner and more organized table display.
+- Easier navigation through historical data.
+
+---
+
+## Updated File Structure (including pagination)
+
+monthly-energy-tracker/
+│
+├── index.html     # Includes navigation menu, pagination controls,
+│                  # and import/export sections
+├── style.css      # Styling for layout, dropdown, table, pagination
+├── config.js      # Config constants (rate, currency, DB settings,
+│                  # page size)
+├── app.js         # IndexedDB CRUD + Import/Export + Pagination
+└── README.md      # Project documentation
+
+
 ## Iteration 2 – New Features
 
 This version extends the MVP (v1) by introducing data management
