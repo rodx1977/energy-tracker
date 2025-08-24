@@ -91,11 +91,10 @@ monthly-energy-tracker/
 
 ---
 
-## Next Steps (Planned Iteration 3)
-
-- Pagination features
+## Next Steps (Planned Iteration 4)
+- automatic Last month energy entry fills the field form 
+- Energy usage charts
 - Server side persistence
 - Authentication and Autorization
-- energy usage charts
 - Multiuser feature
 
