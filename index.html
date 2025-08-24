@@ -23,7 +23,7 @@
     </nav>
   </header>
   <main>
-    <h1>Monthly Energy Tracker v1</h1>
+    <h1>Monthly Energy Tracker v1.1</h1>
 
     <form id="energy-form">
 
@@ -41,7 +41,17 @@
     </form>
 
     <section id="entries">
-      <h2>Saved Entries</h2>
+      <h2>Saved Energy Entries: <span id="saved-energy-entry-counter" class="saved-energy-entry-counter"></span></h2>
+      
+      <div id="paginator-settings" class="paginator-settings">
+        <label for="items-per-page">Items per page:</label>
+        <select id="items-per-page" name="items-per-page">          
+          <option value="3" selected>3</option>
+          <option value="6">6</option>
+          <option value="12">12</option>
+          <option value="24">24</option>          
+        </select>
+      </div>
       <table>
         <thead>
           <tr>
@@ -61,6 +71,10 @@
           <!-- Entries will appear here -->
         </tbody>
       </table>
+      
+      <div id="paginator-section" class="paginator-section" style="display: none;">
+        <!-- buttons for pages generated dinamically -->  
+      </div>
     </section>
     <section id="export-section" style="display: none;">
       <h2>Export</h2>

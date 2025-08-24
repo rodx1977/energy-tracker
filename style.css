@@ -135,6 +135,55 @@ tbody tr:nth-child(even) {
     background: #f2f2f2;
 }   
 
+.paginator-section {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.paginator-text {
+    margin-right: 0.5rem;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.paginator-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.paginator-btn:disabled:hover {
+    background: #ccc;
+}
+
+.paginator-btn{
+    padding: 0.25rem 0.25rem;
+    margin: 0 0.25rem;
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer; 
+}
+
+.paginator-btn:hover {
+    background: #01253b;
+}   
+
+.paginator-settings {
+    margin-top: 1rem;
+    text-align: center;
+}
+.paginator-settings label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+.paginator-settings select {
+    padding: 0.25rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+
 nav {
     background: #014775;
     padding: 0.5rem;

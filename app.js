@@ -1,15 +1,19 @@
-const { dbName: DB_NAME, dbVersion: DB_VERSION, storeName: STORE_NAME, energy_cost_per_kwh: ENERGY_COST_PER_KWH } = CONFIG;
+//constants and variables
+const { dbName: DB_NAME, dbVersion: DB_VERSION, storeName: STORE_NAME, energy_cost_per_kwh: ENERGY_COST_PER_KWH} = CONFIG;
 
 let db;
+//paginate entries
+let currentPage = 1;
+let itemsPerPageSelectedValue = 3;
+
+
+//FUNCTIONS
 
 function setFooterText(){
   let todayDate = new Date();
   document.getElementById("footer-text").textContent = ` ${todayDate.getFullYear()} Energy Tracker App. By Rodx`;
 
 }
-
-
-
 
 //abrir indexedDB
 function openDB() {
@@ -28,6 +32,7 @@ function openDB() {
     // console.log("energy cost per kwh "+ENERGY_COST_PER_KWH);
     displayEntries();
     setFooterText(); // Set footer text with current year
+    // console.log("Items per page: ", ITEMS_PER_PAGE);
   }
 
   request.onupgradeneeded = (event) => { 
@@ -54,6 +59,36 @@ function addEntry(entry) {
   };
 }
 
+//function to create paginator buttons
+function createPaginator(totalPages){
+  console.log("Creating paginator for total pages:", totalPages); 
+  const paginatorSection = document.getElementById("paginator-section");
+  paginatorSection.innerHTML = "";
+  //si la cantidad de paginas es 1 o menor, el paginador no se muestra
+  if(totalPages <= 1){
+    paginatorSection.style.display = "none";
+    return;
+  }
+  paginatorSection.style.display = "block";
+  const paginatorTextLine = document.createElement("span");
+  paginatorTextLine.className = "paginator-text";
+  paginatorTextLine.textContent = "Page "+currentPage+" of "+totalPages+": ";
+  paginatorSection.appendChild(paginatorTextLine);
+  
+  // create button for each page
+  for(let i=1; i<= totalPages; i++){
+    const button = document.createElement("button");
+    button.textContent = i;
+    button.className = "paginator-btn";
+    if(i === currentPage) button.disabled = true; // disable current page button
+    button.addEventListener("click", () => {
+      currentPage = i;
+      displayEntries();
+    });    
+    paginatorSection.appendChild(button);
+  }
+}
+
 //Display entries in the table
 function displayEntries() {
   const tx = db.transaction(STORE_NAME, "readonly");
@@ -63,18 +98,32 @@ function displayEntries() {
 
   request.onsuccess = () => {    
     const entries = request.result;
-    console.log("before sorting");
+    console.log("number of entries:", entries.length);
     //sort the entries by month, date and time
     entries.sort((a, b) => {
       let dateA = new Date(`${a.date} ${a.time}`);
       let dateB = new Date(`${b.date} ${b.time}`);
       return dateB-dateA; // Sort in descending order
     });
+
+    //pagination logic
+    const totalPages = Math.ceil(entries.length / itemsPerPageSelectedValue);
+    if (currentPage > totalPages) currentPage = totalPages; // Adjust current page if out of bounds
+    if (currentPage < 1) currentPage = 1;
+    const startIndex = (currentPage - 1) * itemsPerPageSelectedValue;
+    const paginatedEntries = entries.slice(startIndex, startIndex + itemsPerPageSelectedValue);
+    console.log(`Displaying page ${currentPage} of ${totalPages}`);
+
+    createPaginator(totalPages); // Create or update paginator buttons
+
+    const entryCounter = document.getElementById("saved-energy-entry-counter");
+    entryCounter.textContent = entries.length > 0 ? entries.length : "";
+  
     
     const tbody = document.getElementById("entry-list");
     tbody.innerHTML = "";
 
-    entries.forEach((entry) => {
+    paginatedEntries.forEach((entry) => {
       const delta = entry.energy - entry.last_energy;
       const rate = delta > 0 ? "+" : "";
       const cost = delta * ENERGY_COST_PER_KWH; // example rate: $0.12/kWh
@@ -112,7 +161,6 @@ function displayEntries() {
     });
   };
 }
-
 
 //handle entry for edit the selected entry
 
@@ -292,11 +340,20 @@ document.getElementById("import-data").addEventListener("click", () => {
   document.getElementById("energy-form").style.display = "none";
 });
 
+document.getElementById("items-per-page").addEventListener("change", () => {
+  console.log("Items per page changed");
+  let selectedValue = parseInt(document.getElementById("items-per-page").value);
+  itemsPerPageSelectedValue = selectedValue;
+  displayEntries(); 
+});
+
 showSection("entries"); // Show entries section by default
 
 
 //Initialize everything
 openDB();
+
+
 
 
 
