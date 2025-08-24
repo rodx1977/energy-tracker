@@ -25,14 +25,9 @@ function openDB() {
   request.onsuccess = (event) => {  
     db = event.target.result;
     console.log("Database opened successfully");
-    //console.log("dabatase name "+DB_NAME, DB_VERSION, STORE_NAME,ENERGY_COST_PER_KWH);
-    // console.log("dabatase name "+DB_NAME);
-    // console.log("dabatase version "+DB_VERSION);
-    // console.log("object store name "+STORE_NAME);
-    // console.log("energy cost per kwh "+ENERGY_COST_PER_KWH);
+    
     displayEntries();
-    setFooterText(); // Set footer text with current year
-    // console.log("Items per page: ", ITEMS_PER_PAGE);
+    
   }
 
   request.onupgradeneeded = (event) => { 
@@ -352,6 +347,7 @@ showSection("entries"); // Show entries section by default
 
 //Initialize everything
 openDB();
+setFooterText();
 
 
 
