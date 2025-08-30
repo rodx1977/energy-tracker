@@ -1,5 +1,7 @@
 # energy-tracker
 The Monthly Energy Tracker v1 is a single-page web application (SPA) built with HTML5, CSS3, and JavaScript using IndexedDB for local persistence.
+This webapp helps the user to keep track of the monthly energy usage by typing in the number shown in the energy utility meter.
+All records are shown in grid view with useful insights as %rate change, KW/H difference from last month, and the aprox. cost of present energy bill.
 
 30/8/25
 
