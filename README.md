@@ -1,6 +1,14 @@
 # energy-tracker
 The Monthly Energy Tracker v1 is a single-page web application (SPA) built with HTML5, CSS3, and JavaScript using IndexedDB for local persistence.
 
+30/8/25
+
+## Iteration 2.2 - Las month energy entry feature
+
+This update allows the user to be presented with the last month energy measure.This keeps the user from typing again this value and giving way to errors
+Also it corrects a bug found when in editin mode and updates some texts and confirmation messages in the app flow.
+
+
 23/8/25
 ## Iteration 2.1 – Pagination Feature
 
