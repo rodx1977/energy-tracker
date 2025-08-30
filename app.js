@@ -5,6 +5,8 @@ let db;
 //paginate entries
 let currentPage = 1;
 let itemsPerPageSelectedValue = 3;
+let lastMonthEnergyInput = "";
+let editMode = false;
 
 
 //FUNCTIONS
@@ -118,6 +120,9 @@ function displayEntries() {
     const tbody = document.getElementById("entry-list");
     tbody.innerHTML = "";
 
+    lastMonthEnergyInput = entries.length > 0 ? entries[0].energy : "";
+    console.log("Last month energy input set to:", lastMonthEnergyInput);
+
     paginatedEntries.forEach((entry) => {
       const delta = entry.energy - entry.last_energy;
       const rate = delta > 0 ? "+" : "";
@@ -178,6 +183,7 @@ function loadEntryForEdit(id) {
       document.getElementById("energy-form").dataset.editId = id; // Set a flag to indicate editing mode
       document.querySelector("#submit").textContent = edit_text;
       console.log("Entry found");
+      editMode = true;
       
     } else {
       console.error("Entry not found");
@@ -186,7 +192,7 @@ function loadEntryForEdit(id) {
 }
 
 function deleteEntry(id){
-  const msg="Sure you wanna delete this entry id? "+id;
+  const msg="Are you sure you want to delete this entry? ";
   if(!confirm(msg)) return;
 
   
@@ -208,6 +214,16 @@ function deleteEntry(id){
 
   }
 }
+
+//handle last month energy input auto fill
+document.getElementById("energy").addEventListener("input", (e) => {
+  console.log("Energy input changed:", e.target.value);
+  if(!editMode){
+    document.getElementById("last_energy").value = lastMonthEnergyInput || 0;
+  }
+  
+});
+
 
 //Handle form submission
 document.getElementById("energy-form").addEventListener("submit", (e) => {
@@ -234,21 +250,24 @@ document.getElementById("energy-form").addEventListener("submit", (e) => {
     console.log("Entry updated successfully");
     document.querySelector("#submit").textContent = edit_text;
     delete e.target.dataset.editId; // Clear the edit ID flag
-    displayEntries(); // Refresh the entries display
     e.target.reset(); // Reset the form
+    editMode = false; // exit edit mode
+    displayEntries(); // Refresh the entries display    
     //console.log("Id after reset is ", e.target.dataset.editId);
   }else {
+    console.log("se esta ingresando nuevo registro:");
     const entry = {
       energy: parseFloat(document.getElementById("energy").value),
       last_energy: parseFloat(document.getElementById("last_energy").value),
-      month: document.getElementById("month").value || now.toLocaleString("default", { month: "long", year: "numeric" }),
-      date: document.getElementById("date").value || now.toLocaleDateString(),
-      time: document.getElementById("time").value || now.toLocaleTimeString()
+      month: now.toLocaleString("default", { month: "long", year: "numeric" }),
+      date: now.toLocaleDateString(),
+      time: now.toLocaleTimeString()
     };
-    addEntry(entry);  
+    addEntry(entry); 
+    e.target.reset(); // Reset the form 
   }
   // tx.oncomplete= () => displayEntries();
-  // console.log("Entry added successfully");
+  console.log("edit mode is ", editMode);
   e.target.reset();
 
 });
@@ -275,7 +294,7 @@ document.getElementById("export-button").addEventListener("click", () => {
 
 //handle import button
 document.getElementById("import-file").addEventListener("change",(event) => {
-  const msgImportAlert = "Are you sure you want to import entries? This will overwrite existing data."
+  const msgImportAlert = "Are you sure you want to import this energy data? This will overwrite existing data."
 
   if(!confirm(msgImportAlert)){
     document.getElementById("import-file").value = ""; // Clear the file input if import is cancelled
