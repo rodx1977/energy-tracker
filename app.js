@@ -7,6 +7,8 @@ let currentPage = 1;
 let itemsPerPageSelectedValue = 3;
 let lastMonthEnergyInput = "";
 let editMode = false;
+let energyChart = null;
+let chartTypeSelected = "kw-hour"; // default chart type
 
 
 //FUNCTIONS
@@ -29,6 +31,8 @@ function openDB() {
     console.log("Database opened successfully");
     
     displayEntries();
+    document.getElementById("items-per-page").value = itemsPerPageSelectedValue;
+    document.getElementById("chart-data-selector").value = chartTypeSelected;
     
   }
 
@@ -215,6 +219,91 @@ function deleteEntry(id){
   }
 }
 
+//function render charts
+function renderCharts(){
+  // Placeholder for chart rendering logic
+  console.log("Render charts function called");
+
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  const request = store.getAll();
+
+  request.onsuccess = () => {
+    let entries = request.result;
+
+    entries.forEach((entry) => {
+      const delta = entry.energy - entry.last_energy;
+      const energyCost = delta * ENERGY_COST_PER_KWH; // example rate: $0.12/kWh
+      entry.delta = delta;
+      entry.energyCost = energyCost.toFixed(2).toLocaleString("en-US",{style: "currency", currency:"USD"});
+    });
+    //sort the entries by month, date and time
+    entries.sort((a, b) => {
+      let dateA = new Date(`${a.date} ${a.time}`);
+      let dateB = new Date(`${b.date} ${b.time}`);
+      return dateB-dateA; // Sort in descending order
+    });
+    if(entries.length > 12){
+      console.log("Limiting entries to last 12 for chart display");
+      entries = entries.slice(0,12); // Show only the last 12 entries
+    }
+    // renderCharts(entries);
+    const labels = entries.map(e => e.date);
+    const energyValue = entries.map(e => e.delta);
+    const costValue = entries.map(e => e.energyCost);
+    let chartValue;
+    let labelText;
+    switch(chartTypeSelected){
+    
+    case "kw-hour":
+      console.log("Rendering Kw/H chart");
+      chartValue = energyValue;
+      labelText = "Kilowatts";
+      displayText = "Monthly energy usage";
+      break;
+    case "cost":
+      console.log("Rendering Cost chart");
+      chartValue = costValue;
+      labelText = "Energy Cost in USD";
+      displayText = "Monthly energy costs";
+      break;
+    default:
+      console.log("Unknown chart type, defaulting to Kw/H");
+      chartTypeSelected = "kw-hour";
+      chartValue = energyValue;
+      displayText = "Monthly energy usage";
+  }
+    const ctx = document.getElementById("energyChart").getContext("2d");
+    if(energyChart){
+    console.log("canvas existe, se destruye");
+    energyChart.destroy(); // Destroy previous chart instance if it exists    
+  };
+  energyChart = new Chart(ctx,{
+    type:"bar",
+    data:{
+      labels: labels,
+      datasets:[{
+        label: labelText,
+        data: chartValue,
+        borderColor: "rgba(75, 192, 192, 1)",
+        fill: true,
+        tension: 0.2
+      }]
+    },
+    options:{
+      responsive: true,
+      plugins: {
+        legend: { position: "top" },
+        title: { display: true, text: displayText }
+      }
+
+    }
+  });
+
+
+  };  
+}
+
 //handle last month energy input auto fill
 document.getElementById("energy").addEventListener("input", (e) => {
   console.log("Energy input changed:", e.target.value);
@@ -344,6 +433,38 @@ document.getElementById("menu-home").addEventListener("click", () => {
   document.getElementById("energy-form").style.display = "grid";
 });
 
+document.getElementById("menu-charts").addEventListener("click", () => {
+  showSection("charts-section");
+  document.getElementById("energy-form").style.display = "none";
+
+  // const tx = db.transaction(STORE_NAME, "readonly");
+  // const store = tx.objectStore(STORE_NAME);
+  // const request = store.getAll();
+
+  // request.onsuccess = () => {
+  //   let entries = request.result;
+
+  //   entries.forEach((entry) => {
+  //     const delta = entry.energy - entry.last_energy;
+  //     const energyCost = delta * ENERGY_COST_PER_KWH; // example rate: $0.12/kWh
+  //     entry.delta = delta;
+  //     entry.energyCost = energyCost;
+  //   });
+  //   //sort the entries by month, date and time
+  //   entries.sort((a, b) => {
+  //     let dateA = new Date(`${a.date} ${a.time}`);
+  //     let dateB = new Date(`${b.date} ${b.time}`);
+  //     return dateB-dateA; // Sort in descending order
+  //   });
+  //   if(entries.length > 12){
+  //     console.log("Limiting entries to last 12 for chart display");
+  //     entries = entries.slice(0,12); // Show only the last 12 entries
+  //   }
+  //   renderCharts(entries);
+  // };
+  renderCharts();
+});
+
 document.getElementById("export-data").addEventListener("click", () => {
   showSection("export-section");
   document.getElementById("energy-form").style.display = "none";
@@ -358,7 +479,45 @@ document.getElementById("items-per-page").addEventListener("change", () => {
   console.log("Items per page changed");
   let selectedValue = parseInt(document.getElementById("items-per-page").value);
   itemsPerPageSelectedValue = selectedValue;
-  displayEntries(); 
+  displayEntries();
+
+});
+
+document.getElementById("chart-data-selector").addEventListener("change", () => {
+  console.log("Chart selector changed");
+  let selectedValue = document.getElementById("chart-data-selector").value;
+  chartTypeSelected = selectedValue;
+  console.log("Chart type selected is:", chartTypeSelected);
+
+  // const tx = db.transaction(STORE_NAME, "readonly");
+  // const store = tx.objectStore(STORE_NAME);
+  // const request = store.getAll();
+
+  // request.onsuccess = () => {
+  //   let entries = request.result;
+
+  //   entries.forEach((entry) => {
+  //     const delta = entry.energy - entry.last_energy;
+  //     const energyCost = delta * ENERGY_COST_PER_KWH; // example rate: $0.12/kWh
+  //     entry.delta = delta;
+  //     entry.energyCost = energyCost.toFixed(2).toLocaleString("en-US",{style: "currency", currency:"USD"});
+  //   });
+  //   //sort the entries by month, date and time
+  //   entries.sort((a, b) => {
+  //     let dateA = new Date(`${a.date} ${a.time}`);
+  //     let dateB = new Date(`${b.date} ${b.time}`);
+  //     return dateB-dateA; // Sort in descending order
+  //   });
+
+  //   if(entries.length > 12){
+  //     console.log("Limiting entries to last 12 for chart display");
+  //     entries = entries.slice(0,12); // Show only the last 12 entries
+  //   }
+  //   renderCharts(entries);
+  //   // document.getElementById("chart-data-selector").value = "kw-hour"; // Ensure the selector reflects the current chart type
+  // };
+  renderCharts();
+  
 });
 
 showSection("entries"); // Show entries section by default

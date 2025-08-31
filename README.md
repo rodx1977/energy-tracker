@@ -5,14 +5,18 @@ All records are shown in grid view with useful insights as %rate change, KW/H di
 
 30/8/25
 
-## Iteration 2.2 - Las month energy entry feature
+## Iteraction 1.4 - Datacharts
+
+This update presentes a chart option in the menu. The user can compare kw consumption across the month in a 12 month span. There is cost in US dollars as well in a 12 month span as an option in the chart
+
+## Iteration 1.3 - Las month energy entry feature
 
 This update allows the user to be presented with the last month energy measure.This keeps the user from typing again this value and giving way to errors
 Also it corrects a bug found when in editin mode and updates some texts and confirmation messages in the app flow.
 
 
 23/8/25
-## Iteration 2.1 – Pagination Feature
+## Iteration 1.2 – Pagination Feature
 
 This update introduces pagination for the entries table so that
 large datasets are easier to browse. Instead of showing all saved
@@ -51,7 +55,7 @@ monthly-energy-tracker/
 └── README.md      # Project documentation
 
 
-## Iteration 2 – New Features
+## Iteration 1.1 – New Features
 
 This version extends the MVP (v1) by introducing data management
 capabilities via a navigation menu.
@@ -101,10 +105,8 @@ monthly-energy-tracker/
 
 ---
 
-## Next Steps (Planned Iteration 4) 
-- Energy usage charts
+## Next Steps (Planned Iterations) 
+- Gamification
 - User online manual
-- Server side persistence
-- Authentication and Autorization
-- Multiuser feature
+- PWA application
 

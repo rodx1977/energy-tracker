@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Monthly Energy Tracker</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="config.js"></script>
   
 </head>
@@ -13,6 +14,7 @@
     <nav>
       <ul>
         <li><a href="#" id="menu-home">Home</a></li>
+        <li><a href="#" id="menu-charts">Charts</a></li>
         <li class="dropdown"><a href="#" id="menu-datamanage">Manage Entries</a>
         <ul class="dropdown-content">
           <li><a href="#" id="export-data">Export</a></li>
@@ -23,7 +25,7 @@
     </nav>
   </header>
   <main>
-    <h1>Monthly Energy Tracker v1.1</h1>
+    <h1>Monthly Energy Tracker v1.4</h1>
 
     <form id="energy-form">
 
@@ -75,6 +77,19 @@
       <div id="paginator-section" class="paginator-section" style="display: none;">
         <!-- buttons for pages generated dinamically -->  
       </div>
+    </section>
+    <section id="charts-section" style="display: none;">
+      <h2>Charts</h2>
+      <div id="chart-settings" class="chart-settings">
+        <label for="chart-data">Select type of data for display</label>
+        <select id="chart-data-selector" class="chart-data-selector" name="chart-data">
+          <option value="kw-hour" selected>Kw/H</option>
+          <option value="cost">Cost</option>
+        </select>
+        
+          
+      </div>
+      <canvas id="energyChart" width="400" height="200"></canvas>
     </section>
     <section id="export-section" style="display: none;">
       <h2>Export</h2>
