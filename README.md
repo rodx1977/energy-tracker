@@ -3,9 +3,15 @@ The Monthly Energy Tracker v1 is a single-page web application (SPA) built with 
 This webapp helps the user to keep track of the monthly energy usage by typing in the number shown in the energy utility meter.
 All records are shown in grid view with useful insights as %rate change, KW/H difference from last month, and the aprox. cost of present energy bill.
 
+
+20/9/2025
+
+## Iteration 1.4.1 - Mobile friendly features
+Energy Tracker is now mobile friendly! By using Media Queries the experience in cellphones and tablets are fluid.
+
 30/8/25
 
-## Iteraction 1.4 - Datacharts
+## Iteration 1.4 - Datacharts
 
 This update presentes a chart option in the menu. The user can compare kw consumption across the month in a 12 month span. There is cost in US dollars as well in a 12 month span as an option in the chart
 
@@ -106,7 +112,7 @@ monthly-energy-tracker/
 ---
 
 ## Next Steps (Planned Iterations) 
-- Gamification
+- Settings Module
 - User online manual
 - PWA application
 

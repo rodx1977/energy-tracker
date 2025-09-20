@@ -428,13 +428,35 @@ function showSection(sectionId){
   document.getElementById(sectionId).style.display = "block";
 }
 
+// menu toggling when mobile view
+function toggleNavMenu(){
+  const nav = document.querySelector("#nav-menu");
+  if(nav.style.display === "flex"){
+    nav.style.display = "none";
+  }else{
+    nav.style.display = "flex";
+  } 
+}
+
+// highlight the curent menu where the page is at the moment
+function selectActiveMenu(currentMenu){
+  const menuItem = document.querySelectorAll(".m-navitem");
+  menuItem.forEach(mItem => mItem.classList.remove("m-active"));
+  currentMenu.classList.add("m-active");
+  
+}
+
 document.getElementById("menu-home").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-home");
   showSection("entries");
+  selectActiveMenu(currentMenu);
   document.getElementById("energy-form").style.display = "grid";
 });
 
 document.getElementById("menu-charts").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-charts")
   showSection("charts-section");
+  selectActiveMenu(currentMenu);
   document.getElementById("energy-form").style.display = "none";
 
   // const tx = db.transaction(STORE_NAME, "readonly");
@@ -466,12 +488,16 @@ document.getElementById("menu-charts").addEventListener("click", () => {
 });
 
 document.getElementById("export-data").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-datamanage");
+  selectActiveMenu(currentMenu);
   showSection("export-section");
   document.getElementById("energy-form").style.display = "none";
 });
 
 document.getElementById("import-data").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-datamanage");
   showSection("import-section");
+  selectActiveMenu(currentMenu);
   document.getElementById("energy-form").style.display = "none";
 });
 
@@ -488,6 +514,7 @@ document.getElementById("chart-data-selector").addEventListener("change", () => 
   let selectedValue = document.getElementById("chart-data-selector").value;
   chartTypeSelected = selectedValue;
   console.log("Chart type selected is:", chartTypeSelected);
+
 
   // const tx = db.transaction(STORE_NAME, "readonly");
   // const store = tx.objectStore(STORE_NAME);
@@ -518,6 +545,13 @@ document.getElementById("chart-data-selector").addEventListener("change", () => 
   // };
   renderCharts();
   
+});
+
+// Mobile menu toggle
+document.getElementById("menu-opener-mobile").addEventListener("click", (e) => {
+  // e.preventDefault();
+  console.log("Mobile menu toggled");
+  toggleNavMenu();
 });
 
 showSection("entries"); // Show entries section by default

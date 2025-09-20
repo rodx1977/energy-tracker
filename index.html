@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Monthly Energy Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="config.js"></script>
-  
+
 </head>
+
 <body>
   <header>
     <nav>
-      <ul>
-        <li><a href="#" id="menu-home">Home</a></li>
-        <li><a href="#" id="menu-charts">Charts</a></li>
-        <li class="dropdown"><a href="#" id="menu-datamanage">Manage Entries</a>
-        <ul class="dropdown-content">
-          <li><a href="#" id="export-data">Export</a></li>
-          <li><a href="#" id="import-data">Import</a></li>          
-        </ul>
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="#" id="menu-home" class="m-navitem m-active">Home</a></li>
+        <li><a href="#" id="menu-charts" class="m-navitem">Charts</a></li>
+        <li class="dropdown m-navitem"><a href="#" id="menu-datamanage">Manage Entries</a>
+          <ul class="dropdown-content">
+            <li><a href="#" id="export-data">Export</a></li>
+            <li><a href="#" id="import-data">Import</a></li>
+          </ul>
         </li>
       </ul>
+      <!-- hamburger menu icon for mobile only -->
+      <div id="menu-btn-mobile" class="menu-btn-mobile"><a href="#" id="menu-opener-mobile"><i class="fa fa-bars"></i></a></div>
     </nav>
   </header>
   <main>
-    <h1>Monthly Energy Tracker v1.4</h1>
+    <h1>Monthly Energy Tracker v1.4.1</h1>
 
     <form id="energy-form">
 
@@ -35,23 +40,23 @@
       <label for="last_energy">Last Month Energy Used (kWh):</label>
       <input type="number" id="last_energy" name="last_energy" required min="0" />
 
-     <input type="hidden" id="month" name="month"/>
-     <input type="hidden" id="date" name="date"/>
-     <input type="hidden" id="time" name="time"/>     
+      <input type="hidden" id="month" name="month" />
+      <input type="hidden" id="date" name="date" />
+      <input type="hidden" id="time" name="time" />
 
       <button type="submit" id="submit" value="Add Entry">Add Entry</button>
     </form>
 
     <section id="entries">
       <h2>Saved Energy Entries: <span id="saved-energy-entry-counter" class="saved-energy-entry-counter"></span></h2>
-      
+
       <div id="paginator-settings" class="paginator-settings">
         <label for="items-per-page">Items per page:</label>
-        <select id="items-per-page" name="items-per-page">          
+        <select id="items-per-page" name="items-per-page">
           <option value="3" selected>3</option>
           <option value="6">6</option>
           <option value="12">12</option>
-          <option value="24">24</option>          
+          <option value="24">24</option>
         </select>
       </div>
       <table>
@@ -66,16 +71,16 @@
             <th>Rate</th>
             <th>Cost</th>
             <th colspan="2">Actions</th>
-            
+
           </tr>
         </thead>
         <tbody id="entry-list">
           <!-- Entries will appear here -->
         </tbody>
       </table>
-      
+
       <div id="paginator-section" class="paginator-section" style="display: none;">
-        <!-- buttons for pages generated dinamically -->  
+        <!-- buttons for pages generated dinamically -->
       </div>
     </section>
     <section id="charts-section" style="display: none;">
@@ -86,8 +91,8 @@
           <option value="kw-hour" selected>Kw/H</option>
           <option value="cost">Cost</option>
         </select>
-        
-          
+
+
       </div>
       <canvas id="energyChart" width="400" height="200"></canvas>
     </section>
@@ -99,19 +104,21 @@
       <div id="export-result"></div>
     </section>
     <section id="import-section" style="display: none;">
-      <h2>Import</h2>           
+      <h2>Import</h2>
       <div id="import-result"></div>
       <p>Click the button below to import energy data from another browser. </p>
       <p>First you have to make a backup (export feature) from origin browser</p>
       <label for="import-file" class="custom-file-input-label">Choose JSON file to import:</label>
       <input type="file" id="import-file" accept="application/json" class="custom-file-input" />
-      
+
     </section>
   </main>
   <footer>
-    <p class="footer-text-paragraph" id="footer-text-paragraph">&copy;<span id="footer-text" class="footer-text"></span></p>
+    <p class="footer-text-paragraph" id="footer-text-paragraph">&copy;<span id="footer-text" class="footer-text"></span>
+    </p>
   </footer>
-<script src="app.js"></script>
-  
+  <script src="app.js"></script>
+
 </body>
+
 </html>
