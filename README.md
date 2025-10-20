@@ -3,6 +3,16 @@ The Monthly Energy Tracker v1 is a single-page web application (SPA) built with 
 This webapp helps the user to keep track of the monthly energy usage by typing in the number shown in the energy utility meter.
 All records are shown in grid view with useful insights as %rate change, KW/H difference from last month, and the aprox. cost of present energy bill.
 
+9/10/2025
+## Iteration 1.5.1 - Settings
+Energy Tracker now asks for: 
+your name if there is none configured in the beginning. 
+Asks for your goals in costs or kw consumed
+asks for the hottests and coolest months in the year in your region
+check if you want to get notifications when you need to feed a new energy measure
+asks for the day your utility company usually bills
+asks for the day you need to feed the energy measure and if notifications are enabled it will notify
+
 
 20/9/2025
 
@@ -29,7 +39,7 @@ large datasets are easier to browse. Instead of showing all saved
 entries at once, the app now splits them into smaller pages.
 
 ### Key Details
-- Pagination controls are displayed below the entries table.
+ - Pagination controls are displayed below the entries table.
 - Users can navigate between pages (3,6,12,24).
 - The number of entries per page is fixed via a select html control (configurable in code).
 - Ensures that even with hundreds of records, performance and

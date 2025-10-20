@@ -18,7 +18,8 @@
       <ul id="nav-menu" class="nav-menu">
         <li><a href="#" id="menu-home" class="m-navitem m-active">Home</a></li>
         <li><a href="#" id="menu-charts" class="m-navitem">Charts</a></li>
-        <li class="dropdown m-navitem"><a href="#" id="menu-datamanage">Manage Entries</a>
+        <li><a href="#" id="menu-settings" class="m-navitem">Settings</a></li>
+        <li class="dropdown m-navitem"><a href="#" id="menu-datamanage" class="m-navitem" >Manage Entries</a>
           <ul class="dropdown-content">
             <li><a href="#" id="export-data">Export</a></li>
             <li><a href="#" id="import-data">Import</a></li>
@@ -30,8 +31,8 @@
     </nav>
   </header>
   <main>
-    <h1>Monthly Energy Tracker v1.4.1</h1>
-
+    <h1>Monthly Energy Tracker v1.5.1</h1>
+    <h4>Welcome, <span class="greetings"></span></h4>
     <form id="energy-form">
 
       <label for="energy">This Month Energy Used (kWh):</label>
@@ -111,6 +112,88 @@
       <label for="import-file" class="custom-file-input-label">Choose JSON file to import:</label>
       <input type="file" id="import-file" accept="application/json" class="custom-file-input" />
 
+    </section>
+    <section id="settings-section">
+      <h2>Settings</h2>
+      <form id="settings-form">
+        <label for="username">Your name</label>
+        <input type="text" id="username" name="username" placeholder="M F Luder" required/>
+        <hr/>
+        <h3><label for="mygoalchoice">Goals:</label></h3>
+        <p>You can estimate how much money or kilowatts you are projecting to spend monthly. You can set goals
+          for hottest and coolest months. These goals can be changed overtime</p>
+        <select id="mygoalchoice" name="mygoalchoice">
+          <option value="money" selected>Money</option>
+          <option value="Kilowatt">Kilowatt</option>
+        </select>
+        <label for="mygoal-hottest-months">In hottest months my goal is to spend less <span id="goal-unit"><b></b></span> than:</label>
+        <input type="number" id="mygoal-hottest-months" name="mygoal-hottest-months" required min="0" placeholder="0"/>
+        <label for="mygoal-coolest-months">In coolest months my goal is to spend less <span id="goal-unit"><b></b></span> than:</label>
+        <input type="number" id="mygoal-coolest-months" name="mygoal-coolest-months" required min="0" placeholder="0"/>
+        <h3><label for="cost-per-kilowatt">Cost per Kilowatt in US Dollars:</label></h3>
+        <p>You can estimate this value by dividing a month energy bill by kilowatts consumed.</p>
+        <input type="number" id="cost-per-kilowatt" name="cost-per-kilowatt" required min="0" step="0.000001"/>
+        <fieldset >
+          <legend>Hottest Months</legend>
+          <p>Check hottest months in your region.</p>
+          <div class="month-checkboxes" id="hottest-months">
+          <!-- dinamically create months checkboxes -->
+          </div>
+        </fieldset>
+        <fieldset>  
+          <legend>Coolest Months</legend>
+          <p>Remaining coolest months in your region based on the hottest months selection above.</p>
+          <div class="month-checkboxes" id="coolest-months">
+            <!-- dinamically create months checkboxes -->
+          </div>
+        </fieldset>        
+        <hr/>
+        <h3><label for="measure-date" id="measure-date-label">Monthly measure date: the  <span id="measure-date-value"></span> of any given month.</label></h3>
+        <p>Select the designated date when your utility company does the monthly billing and you need to
+          input the energy measure. By default it will consider the 15th of each month.
+        </p>
+        <input type="range" id="measure-date" name="measure-date" min="1" max="31" value="15" list="range-markers"/>   
+        <datalist id="range-markers">
+          <option value="1" label="1"></option>
+          <option value="5" label="5"></option>
+          <option value="10" label="10"></option>
+          <option value="15" label="15"></option>
+          <option value="20" label="20"></option>
+          <option value="25" label="25"></option>
+          <option value="31" label="31"></option>
+        </datalist>
+        <fieldset>
+          <h3><legend>Notifications</legend></h3>
+          <p>If enabled, you will receive friendly notifications near and on the date your utility
+            company does the monthly billing so you do not forget to input the energy measure.
+          </p>         
+          <label for="enable-notifications" class="enable-notifications">
+          <input type="checkbox" id="enable-notifications" name="enable-notifications" value="on" />
+          <span class="slider"></span>
+          </label>
+        </fieldset>    
+        <hr/>
+        <h3>Export options</h3>
+        <p>When backing up your energy measure data you can choose to export locally or use
+          your preferred cloud service (Google Drive, Dropbox, Office 365,etc).
+        </p>  
+        <fieldset>
+          <legend>Options</legend>
+          <input type="radio" id="export-local" name="export-option" value="export-local" checked />
+          <label for="export-local">Local (Default. Download locally)</label><br />
+          <input type="radio" id="export-google-cloud" name="export-option" value="export-google-cloud" />
+          <label for="export-google-cloud">Google Cloud</label><br />
+          <input type="radio" id="export-365" name="export-option" value="export-365" />
+          <label for="export-365">Office 365</label><br />
+          <input type="radio" id="export-dropbox" name="export-option" value="export-dropbox" />
+          <label for="export-dropbox">Dropbox</label><br />
+          <button type="button" id="cloud-connect-btn">Connect</button>
+        </fieldset>
+        
+        <button type="submit" id="save-settings" value="Save Settings">Save Settings</button>
+      </form>
+
+      </form>
     </section>
   </main>
   <footer>

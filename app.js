@@ -1,6 +1,12 @@
 //constants and variables
-const { dbName: DB_NAME, dbVersion: DB_VERSION, storeName: STORE_NAME, energy_cost_per_kwh: ENERGY_COST_PER_KWH} = CONFIG;
-
+const { dbName: DB_NAME, dbVersion: DB_VERSION, storeName: STORE_NAME} = CONFIG;
+// months of the year array
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+const genSettings = JSON.parse(localStorage.getItem("energyTrackerSettings"));
+const ENERGY_COST_PER_KWH = genSettings?.costperkwh ? parseFloat(genSettings.costperkwh) : 0.099166; // default cost if not set in settings
 let db;
 //paginate entries
 let currentPage = 1;
@@ -45,6 +51,9 @@ function openDB() {
 
     
   }
+
+  // get the user first name
+  getGreetingName();
 
 }
 
@@ -304,6 +313,76 @@ function renderCharts(){
   };  
 }
 
+// render months checkboxes in settings
+function renderMonthsCheckBoxes(){
+  console.log("Rendering months checkboxes");
+  ["hottest-months","coolest-months"].forEach(Id => {
+    const container = document.getElementById(Id);
+    container.innerHTML = MONTHS.map(month => `<label><input type="checkbox" name="${month}" />${month}</label>`).join("");
+    
+  });
+}
+
+function makeCoolestMonthsReadOnly(containerId){
+  document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+    cb.disabled = true;  
+  });
+}
+
+// get selected months from checkboxes
+function getSelectedMonths(containerId){
+  return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(cb => cb.name);
+}
+
+//get non selected months that represent coolest months
+function getCoolestSelectedMonths(containerId){
+  return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:not(:checked)`)).map(cb => cb.name);
+  
+}
+
+function setSelectedMonths(containerId, selectedMonths=[]){
+  document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+    cb.checked = selectedMonths.includes(cb.name);  
+  });
+  
+}
+
+// get settings data from localstorage
+function getSettingsData(){
+  console.log("Getting settings data from localStorage");
+  const settings = JSON.parse(localStorage.getItem("energyTrackerSettings"));
+  if(!settings) return;
+  document.getElementById("username").value = settings.username || "";
+  document.getElementById("mygoalchoice").value = settings?.mygoalchoice || "";
+  document.getElementById("cost-per-kilowatt").value = settings?.costperkwh || "";
+  document.getElementById("mygoal-hottest-months").value = settings.mygoalhottestmonths || "";
+  document.getElementById("mygoal-coolest-months").value = settings.mygoalcoolestmonths || "";
+
+  // get hottest months checkboxes here
+  // get coolest months checkboxes here
+  setSelectedMonths("hottest-months", settings.hottestmonths);
+  setSelectedMonths("coolest-months", settings.coolestmonths);
+  
+  document.getElementById("measure-date").value = settings.measuredate || 15;
+  document.getElementById("measure-date-value").textContent = settings.measuredate || 15;
+  document.getElementById("enable-notifications").value = settings.enablenotifications || "";
+  document.getElementById(settings?.exportoption).checked = true;
+}
+
+function getGreetingName(){
+  const settings = JSON.parse(localStorage.getItem("energyTrackerSettings"));
+  const greetingFirstName = document.querySelector(".greetings");
+  if(settings?.username){
+    const justName = settings.username.split(" ")[0]; // Get first name only
+    console.log("User first name for greeting:", justName);
+    greetingFirstName.textContent = " "+justName+"!";
+    // return justName;
+  }else{
+  greetingFirstName.textContent =  " Dear User!";
+  }   
+  
+}
+
 //handle last month energy input auto fill
 document.getElementById("energy").addEventListener("input", (e) => {
   console.log("Energy input changed:", e.target.value);
@@ -487,6 +566,13 @@ document.getElementById("menu-charts").addEventListener("click", () => {
   renderCharts();
 });
 
+document.getElementById("menu-datamanage").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-datamanage");
+  selectActiveMenu(currentMenu);
+  //showSection("export-section");
+  document.getElementById("energy-form").style.display = "none";
+});
+
 document.getElementById("export-data").addEventListener("click", () => {
   const currentMenu = document.getElementById("menu-datamanage");
   selectActiveMenu(currentMenu);
@@ -499,6 +585,16 @@ document.getElementById("import-data").addEventListener("click", () => {
   showSection("import-section");
   selectActiveMenu(currentMenu);
   document.getElementById("energy-form").style.display = "none";
+});
+
+document.getElementById("menu-settings").addEventListener("click", () => {
+  const currentMenu = document.getElementById("menu-settings");
+  showSection("settings-section");
+  selectActiveMenu(currentMenu);
+  renderMonthsCheckBoxes();  
+  makeCoolestMonthsReadOnly("coolest-months");
+  document.getElementById("energy-form").style.display = "none";
+  getSettingsData();
 });
 
 document.getElementById("items-per-page").addEventListener("change", () => {
@@ -556,7 +652,35 @@ document.getElementById("menu-opener-mobile").addEventListener("click", (e) => {
 
 showSection("entries"); // Show entries section by default
 
+//get the day selected when using range input
+document.getElementById("measure-date").addEventListener("input", (e) => {
+  const dayValue = e.target.value;
+  document.getElementById("measure-date-value").textContent = dayValue;
+});
 
+// set settings on submit
+document.getElementById("settings-form").addEventListener("submit", (e) => {
+  console.log("Settings form submitted");
+  e.preventDefault();
+  const settings = {
+    username: document.getElementById("username").value,
+    mygoalchoice: document.getElementById("mygoalchoice").value,
+    costperkwh: document.getElementById("cost-per-kilowatt").value,
+    mygoalhottestmonths: document.getElementById("mygoal-hottest-months").value,
+    mygoalcoolestmonths: document.getElementById("mygoal-coolest-months").value,
+    measuredate: document.getElementById("measure-date").value,
+    enablenotifications: document.getElementById("enable-notifications").value,
+    exportoption: document.querySelector('input[name="export-option"]:checked')?.value || "local",
+    hottestmonths: getSelectedMonths("hottest-months"),
+    coolestmonths: getCoolestSelectedMonths("hottest-months"),
+  };
+  console.log("coolest months selected are:", settings.coolestmonths);
+  console.log("hottest months selected are:", settings.hottestmonths);
+  localStorage.setItem("energyTrackerSettings", JSON.stringify(settings));
+  alert("Settings saved successfully");
+  setSelectedMonths("coolest-months", settings.coolestmonths); // update coolest months checkboxes
+
+});
 //Initialize everything
 openDB();
 setFooterText();
